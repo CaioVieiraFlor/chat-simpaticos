@@ -1,6 +1,11 @@
 import express from 'express'
 import { createServer } from 'http'
-import socketIo from 'socket.io'
+import { Server } from "socket.io";
+import path from 'path'
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 const app = express()
 app.get('/', (req, res) => {
@@ -8,16 +13,22 @@ app.get('/', (req, res) => {
 })
 
 const server = createServer(app)
-const io = socketIo(server)
+const io = new Server(server)
 io.on('connection', (socket) => {
     console.log('Um usário se conectou')
 
-    socket.on('disconnect', () => {
-        console.log('Um usuário se desconectou')
+    socket.emit('conectado')
+
+    socket.on('joinChat', (room) => {
+        socket.join(room)
+    })
+    
+    socket.on('chatMessage', ({message, room}) => {
+        io.to(room).emit('message', message)
     })
 
-    socket.on('chat message', (message) => {
-        io.emit('chat message', message)
+    socket.on('disconnect', () => {
+        console.log('Um usuário se desconectou')
     })
 })
 

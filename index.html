@@ -38,25 +38,25 @@
             <div id="div-messages"></div>
 
             <div>
-                <input id="input-message" autocomplete="off">
+                <input id="input-message" data-room="room1" autocomplete="off">
                 <button id="button-send">Enviar</button>
             </div>
         </div>
 
         <script src="/socket.io/socket.io.js"></script>
-        <script>
-            const socket = io()
-            socket.on('chat message', (message) => {
-                const divMessages = document.getElementById('div-messages')
-                const paragraph = document.createElement('p')
-                paragraph.textContent = message
-                divMessages.appendChild(paragraph)
-            })
+        <script>           
+            const inputMessage = document.getElementById('input-message')
+            const room = inputMessage.dataset.room
 
+            const socket = io()
+
+            socket.on('conectado', () => {
+                socket.emit('joinChat', room)
+            })
+            
             const sendMessage = () => {
-                const inputMessage = document.getElementById('input-message')
                 const message = inputMessage.value
-                socket.emit('chat message', message)
+                socket.emit('chatMessage', {message, room})
                 inputMessage.value = ''
             }
 
@@ -70,6 +70,14 @@
                 if (e.key == 'Enter') {
                     sendMessage()
                 }
+            })
+
+            socket.on('message', (message) => {
+                console.log('testando')
+                const divMessages = document.getElementById('div-messages')
+                const paragraph = document.createElement('p')
+                paragraph.textContent = message
+                divMessages.appendChild(paragraph)
             })
         </script>
     </body>
