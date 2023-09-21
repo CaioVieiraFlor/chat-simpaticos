@@ -32,54 +32,92 @@
     </style>
 </head>
 
-    <body>
-        <div class="chat-container">
-            <h2 id="chat-title">Chat dos Simpáticos</h2>
-            <div id="div-messages"></div>
+<body>
+    <div class="chat-container">
+        <h2 id="chat-title">Chat dos Simpáticos</h2>
+        <div id="div-messages"></div>
 
-            <div>
-                <input id="input-message" data-room="room1" autocomplete="off">
-                <button id="button-send">Enviar</button>
-            </div>
+        <div>
+            <input id="input-message" data-room="room1" autocomplete="off">
+            <button id="button-send">Enviar</button>
         </div>
+    </div>
 
-        <script src="/socket.io/socket.io.js"></script>
-        <script>           
-            const inputMessage = document.getElementById('input-message')
-            const room = inputMessage.dataset.room
+    <button id="button-emoticon">😀 Emoticons</button>
+    <div id="modal-emoticon" style="display: none;">
+        <ul id="list-emoticon">
+            <li><span class="emoticon" onclick="insertEmoticon('😀')">😀</span></li>
+            <li><span class="emoticon" onclick="insertEmoticon('😂')">😂</span></li>
+            <li><span class="emoticon" onclick="insertEmoticon('🥴')">🥴</span></li>
+            <li><span class="emoticon" onclick="insertEmoticon('😨')">😨</span></li>
+            <li><span class="emoticon" onclick="insertEmoticon('😭')">😭</span></li>
+            <li><span class="emoticon" onclick="insertEmoticon('😱')">😱</span></li>
+            <li><span class="emoticon" onclick="insertEmoticon('❤️')">❤️</span></li>
+            <li><span class="emoticon" onclick="insertEmoticon('👋')">👋</span></li>
+            <li><span class="emoticon" onclick="insertEmoticon('👌')">👌</span></li>
+            <li><span class="emoticon" onclick="insertEmoticon('👋')">👋</span></li>
+            <li><span class="emoticon" onclick="insertEmoticon('🤏')">🤏</span></li>
+            <li><span class="emoticon" onclick="insertEmoticon('✌️')">✌️</span></li>
+            <li><span class="emoticon" onclick="insertEmoticon('🤞')">🤞</span></li>
+            <li><span class="emoticon" onclick="insertEmoticon('🤟')">🤟</span></li>
+            <li><span class="emoticon" onclick="insertEmoticon('🤘')">🤘</span></li>
+            <li><span class="emoticon" onclick="insertEmoticon('🤙')">🤙</span></li>
+            <li><span class="emoticon" onclick="insertEmoticon('👈')">👈</span></li>
+            <li><span class="emoticon" onclick="insertEmoticon('👉')">👉</span></li>
+            <li><span class="emoticon" onclick="insertEmoticon('👆')">👆</span></li>
+            <li><span class="emoticon" onclick="insertEmoticon('🖕')">🖕</span></li>
+            <li><span class="emoticon" onclick="insertEmoticon('👇')">👇</span></li>
+            <li><span class="emoticon" onclick="insertEmoticon('☝️')">☝️</span></li>
+            <li><span class="emoticon" onclick="insertEmoticon('👍')">👍</span></li>
+            <li><span class="emoticon" onclick="insertEmoticon('👎')">👎</span></li>
+            <li><span class="emoticon" onclick="insertEmoticon('✊')">✊</span></li>
+            <li><span class="emoticon" onclick="insertEmoticon('👊')">👊</span></li>
+            <li><span class="emoticon" onclick="insertEmoticon('🤛')">🤛</span></li>
+            <li><span class="emoticon" onclick="insertEmoticon('🤜')">🤜</span></li>
+            <li><span class="emoticon" onclick="insertEmoticon('👐')">👐</span></li>
+            <li><span class="emoticon" onclick="insertEmoticon('🤲')">🤲</span></li>
+            <li><span class="emoticon" onclick="insertEmoticon('🤝')">🤝</span></li>
+            <!-- Adicione mais emoticons conforme necessário -->
+        </ul>
+    </div>
 
-            const socket = io()
+    <script type="text/javascript" src="/assets/emoji.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const inputMessage = document.getElementById('input-message')
+        const room = inputMessage.dataset.room
 
-            socket.on('conectado', () => {
-                socket.emit('joinChat', room)
-            })
-            
-            const sendMessage = () => {
-                const message = inputMessage.value
-                socket.emit('chatMessage', {message, room})
-                inputMessage.value = ''
-            }
+        const socket = io()
 
-            const btnSendMessage = document.getElementById('button-send')
-            btnSendMessage.addEventListener('click', () => {
+        socket.on('conectado', (socketId) => {
+            socket.emit('joinChat', room)
+        })
+
+        const sendMessage = () => {
+            const message = inputMessage.value
+            socket.emit('chatMessage', { message, room })
+            inputMessage.value = ''
+        }
+
+        const btnSendMessage = document.getElementById('button-send')
+        btnSendMessage.addEventListener('click', () => {
+            sendMessage()
+        })
+
+        const teste = document.getElementById('input-message')
+        teste.addEventListener('keydown', (e) => {
+            if (e.key == 'Enter') {
                 sendMessage()
-            })
+            }
+        })
 
-            const teste = document.getElementById('input-message')
-            teste.addEventListener('keydown', (e) => {
-                if (e.key == 'Enter') {
-                    sendMessage()
-                }
-            })
-
-            socket.on('message', (message) => {
-                console.log('testando')
-                const divMessages = document.getElementById('div-messages')
-                const paragraph = document.createElement('p')
-                paragraph.textContent = message
-                divMessages.appendChild(paragraph)
-            })
-        </script>
-    </body>
+        socket.on('message', (message) => {
+            const divMessages = document.getElementById('div-messages')
+            const paragraph = document.createElement('p')
+            paragraph.textContent = message
+            divMessages.appendChild(paragraph)
+        })
+    </script>
+</body>
 
 </html>
