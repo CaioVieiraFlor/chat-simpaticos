@@ -4,16 +4,14 @@ const emoticonList = document.getElementById('list-emoticon');
 const messageInput = document.getElementById('input-message');
 
 emoticonButton.addEventListener('click', () => {
-    if (emoticonModal.style.display === 'none') {
-        emoticonModal.style.display = 'block';
+    if (emoticonList.classList.contains('active')) {
+        emoticonList.classList.remove('active');
     } else {
-        emoticonModal.style.display = 'none';
+        emoticonList.classList.add('active');
     }
 });
 
 function insertEmoticon(emoticon) {
-    console.log(messageInput)
     messageInput.value += emoticon;
-
-    emoticonModal.style.display = 'none';
+    emoticonList.classList.remove('active');
 }

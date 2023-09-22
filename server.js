@@ -13,6 +13,11 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html')
 })
 
+app.get('/style.css', (req, res) => {
+    res.setHeader('Content-Type', 'text/css');
+    res.sendFile(__dirname + '/style.css');
+});
+
 app.get('/assets/emoji.js', (req, res) => {
     res.setHeader('Content-Type', 'text/javascript');
     res.sendFile(__dirname + '/assets/emoji.js');
